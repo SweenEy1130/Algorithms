@@ -33,12 +33,8 @@ public:
     }
 
     void reverse(vector<int> &num, int st, int end){
-        while(st < end){
-            swap(num[st], num[end]);
-            st++;
-            end--;
-        }
-        return;
+        while(st < end)
+            swap(num[st++], num[end--]);
     }
 };
 

@@ -1,11 +1,8 @@
-#include <iostream>
-#include <vector>
-#include <map>
-using namespace std;
+// unordered_map is faster than map
 class Solution {
 public:
     vector<int> twoSum(vector<int> &numbers, int target) {
-        map<int, int> IntMap;
+        unordered_map<int, int> IntMap;
         vector<int> ret;
         for (int i = 0; i < numbers.size(); ++i)
         {
