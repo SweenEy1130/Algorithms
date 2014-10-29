@@ -2,7 +2,7 @@
 #include <iostream>
 using namespace std;
 // Single pivot
-/*void quicksort(int * a, int first, int last){
+void quicksort(int * a, int first, int last){
     if (first < last){
         int pivot = a[first], i = first, j = last, tmp;
         while(i < j){
@@ -20,10 +20,10 @@ using namespace std;
         quicksort(a, j+1, last);
     }
     return;
-}*/
+}
 
 // Three way partition
-/*void quicksort(int a[], int first, int last){
+void quicksort(int a[], int first, int last){
     if (first >= last) return;
     int pivot = a[first];
     int right = last, left = first, idx = first + 1;
@@ -39,7 +39,7 @@ using namespace std;
     quicksort(a, first, left - 1);
     quicksort(a, right + 1, last);
     return;
-}*/
+}
 
 
 // Double pivots
