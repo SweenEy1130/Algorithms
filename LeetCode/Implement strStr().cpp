@@ -4,46 +4,52 @@ using namespace std;
 
 class Solution {
 public:
-    char *strStr(char *haystack, char *needle) {
+    int strStr(char *haystack, char *needle) {
         if (haystack == NULL || needle == NULL)
-            return NULL;
+            return -1;
         int hl = strlen(haystack), nl = strlen(needle);
-        if (nl == 0) return haystack;
-        if (hl == 0) return NULL;
+        if (nl == 0) return 0;
+        if (hl == 0) return -1;
 
         // Compute prefix for the pattern
-        int * pi = new int [nl+1];
-        pi[1] = 0;
-        int k = 0;
-        for (int q = 1; q < nl; q++){
-            while(k > 0 && needle[k] != needle[q])
-                k = pi[k];
-            if (needle[k] == needle[q])
-                k++;
-            pi[q+1] = k;
+        int * next = new int [nl];
+        next[0] = -1;
+        int cur = 0, k = -1;
+        while (cur < nl-1)
+        {
+            if (k == -1 || needle[cur] == needle[k])
+                if (needle[++cur] == needle[++k])
+                    next[cur] = next[k];
+                else
+                    next[cur] = k;
+                // next[++cur] = ++k;
+            else
+                k = next[k];
         }
 
-        // KMP
-        int q = 0;
-        for (int i = 0; i < hl; i++){
-            while (q > 0 && needle[q] != haystack[i])
-                q = pi[q];
-            if (haystack[i] == needle[q])
-                q++;
-            if (q == nl){
-                return haystack + i - nl + 1;
+        cur = 0;
+        k = 0;
+        while (cur < hl)
+        {
+            if (k == -1 || haystack[cur] == needle[k]){
+                cur++;k++;
+            }else{
+                k = next[k];
+            }
+            if (k == nl){
+                return cur-k;
             }
         }
-
-        return NULL;
+        return -1;
     }
 };
 
 int main(int argc, char const *argv[])
 {
     Solution s;
-    char * haystack = "bbc abcdab abcdabcdabde", * needle = "abcdabd";
-    // char * haystack = "mississippi", * needle = "mississippi";
+    // char * haystack = "bbc abcdab abcdabcdabde", * needle = "abcdabd";
+    // char * haystack = "mississip", * needle = "issip";
+    char * haystack = "abacbcdhiabab", * needle = "abab";
     cout << s.strStr(haystack, needle) << endl;
     return 0;
 }
