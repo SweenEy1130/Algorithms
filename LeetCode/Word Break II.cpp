@@ -1,30 +1,43 @@
-vector<string> wordBreak(string s, unordered_set<string> &dict) {
-    string result;
-    vector<string> solutions;
-    int len = s.size();
-    vector<bool> possible(len+1, true); // to record the search which has been executed once
-    GetAllSolution(0, s, dict, len, result, solutions, possible);
-    return solutions;
-}
+#include <vector>
+#include <string>
+#include <iostream>
+#include <unordered_set>
 
-void GetAllSolution(int start, const string& s, const unordered_set<string> &dict, int len, string& result, vector<string>& solutions, vector<bool>& possible)
+using namespace std;
+
+class Solution {
+public:
+	vector<string> wordBreak(string s, unordered_set<string> &dict) {
+		int l = s.length();
+		vector<bool> opt(l+1, false);
+		vector<vector<string> > res(l+1, vector<string>(0));
+		res[0].push_back("");
+
+		opt[0] = true;
+		for (int i = 1; i <= l; ++i)
+			for (int j = 0; j < i; ++j){
+				string tmp = s.substr(j, i-j);
+				if (opt[j] && dict.find(tmp) != dict.end()){
+					opt[i] = true;
+					for (int k = 0; k < res[j].size(); ++k)
+						res[i].push_back(res[j][k] + " " + tmp);
+				}
+			}
+		return res[l];
+	}
+};
+
+int main(int argc, char const *argv[])
 {
-    if (start == len)
+    Solution s;
+    unordered_set<string> dict;
+    dict.insert("aaaa");
+    dict.insert("aa");
+    string str("aaaaaa");
+    vector<string> ans = s.wordBreak(str, dict);
+    for (int i = 0; i < ans.size(); ++i)
     {
-        solutions.push_back(result.substr(0, result.size()-1));//eliminate the last space
-        return;
+    	cout << ans[i] << endl;
     }
-    for (int i = start; i< len; ++i)
-    {
-        string piece = s.substr(start, i - start + 1);
-        if (dict.find(piece) != dict.end() && possible[i+1]) // eliminate unnecessory search
-        {
-            result.append(piece).append(" ");
-            int beforeChange = solutions.size();
-            GetAllSolution(i + 1, s, dict, len, result, solutions, possible);
-            if(solutions.size() == beforeChange) // if no solution, set the possible to false
-                possible[i+1] = false;
-            result.resize(result.size() - piece.size()-1);
-        }
-    }
+    return 0;
 }
