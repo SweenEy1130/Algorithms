@@ -1,22 +1,23 @@
 class Solution {
 public:
     vector<vector<int> > combine(int n, int k) {
-        vector<vector<int> >res;
-        if(n<k)return res;
-        vector<int> temp(0,k);
-        combine(res,temp,0,0,n,k);
-        return res;
+        vector<vector<int> > ans;
+        vector<int> result;
+        dfs(ans, result, n, 1, k);
+        return ans;
     }
-
-    void combine(vector<vector<int> > &res,vector<int> &temp,int start,int num,int n ,int k){
-        if(num==k){
-            res.push_back(temp);
+    void dfs(vector<vector<int> > &ans, vector<int> result, int n, int num, int k){
+        if (k == 0){
+            ans.push_back(result);
             return;
         }
-        for(int i = start;i<n;i++){
-            temp.push_back(i+1);
-            combine(res,temp,i+1,num+1,n,k);
-            temp.pop_back();
+
+        if (num <= n-k+1 && k > 0){
+            for (int i = num; i <= n; i++){
+                result.push_back(i);
+                dfs(ans, result, n, i+1, k-1);
+                result.pop_back();
             }
         }
+    }
 };
